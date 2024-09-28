@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ryy.article.mapper.ApArticleMapper">
+
+    <resultMap id="resultMap" type="com.ryy.model.article.pojos.ApArticle">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="author_id" property="authorId"/>
+        <result column="author_name" property="authorName"/>
+        <result column="power_id" property="powerId"/>
+        <result column="power_name" property="powerName"/>
+        <result column="layout" property="layout"/>
+        <result column="flag" property="flag"/>
+        <result column="type" property="type"/>
+        <result column="is_answered" property="isAnswered"/>
+        <result column="images" property="images"/>
+        <result column="labels" property="labels"/>
+        <result column="votes" property="votes"/>
+        <result column="comment" property="comment"/>
+        <result column="views" property="views"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="publish_time" property="publishTime"/>
+        <result column="sync_status" property="syncStatus"/>
+        <result column="static_url" property="staticUrl"/>
+    </resultMap>
+    <select id="loadArticleList" resultMap="resultMap">
+        SELECT
+        aa.*
+        FROM
+        `ap_article` aa
+        <where>
+            and aa.flag = 1
+            <!-- loadmore -->
+            <if test="loadType != null and loadType == 1">
+                and aa.publish_time <![CDATA[<]]> #{dto.minBehotTime}
+            </if>
+            <!-- loadnew -->
+            <if test="loadType != null and loadType == 2">
+                and aa.publish_time <![CDATA[>]]> #{dto.maxBehotTime}
+            </if>
+            <if test="dto.tag != '__all__'">
+                and aa.power_id = #{dto.tag}
+            </if>
+        </where>
+        order by aa.publish_time desc
+        limit #{dto.size}
+    </select>
+
+</mapper>

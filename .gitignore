@@ -6,4 +6,4 @@ target/
 .DS_Store
 .gitattributes
 compose.yaml
-
+nginx-1.18.0/logs/

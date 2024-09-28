@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>ryy-askshaanxi-user</module>
+        <module>ryy-askshaanxi-article</module>
     </modules>
     <dependencies>
         <dependency>

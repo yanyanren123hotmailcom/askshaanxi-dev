@@ -27,6 +27,7 @@
         <module>ryy-askshaanxi-model</module>
         <module>ryy-askshaanxi-gateway</module>
         <module>ryy-askshaanxi-tests</module>
+        <module>ryy-askshaanxi-basic</module>
     </modules>
     <scm>
         <connection/>
