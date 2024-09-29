@@ -14,6 +14,7 @@
     <modules>
         <module>ryy-askshaanxi-user</module>
         <module>ryy-askshaanxi-article</module>
+        <module>ryy-askshaanxi-wemedia</module>
     </modules>
     <dependencies>
         <dependency>

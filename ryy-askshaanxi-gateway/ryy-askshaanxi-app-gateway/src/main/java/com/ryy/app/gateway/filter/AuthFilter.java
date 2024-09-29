@@ -46,6 +46,15 @@ public class AuthFilter implements GlobalFilter {
                 response.setStatusCode(HttpStatus.UNAUTHORIZED);
                 return response.setComplete();
             }
+            //获取用户id
+            String useId = (String)claimsBody.get("id");
+            //添加userId到header
+            ServerHttpRequest serverHttpRequest = request.mutate().headers(httpHeaders -> {
+                httpHeaders.add("userId", useId + "");
+            }).build();
+            //重置requestServlet
+            exchange.mutate().request(serverHttpRequest).build();
+
         }catch (Exception e){
             e.printStackTrace();
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
