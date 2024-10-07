@@ -48,7 +48,7 @@ public class WmNews implements Serializable {
     private String content;
 
     /**
-     * 文章布局
+     * 文章布局:文章封面图片类型
             0 无图文章
             1 单图文章
             3 多图文章
@@ -57,7 +57,7 @@ public class WmNews implements Serializable {
     private Short type;
 
     /**
-     * 图文频道ID
+     * 权力部门频道ID
      */
     @TableField("channel_id")
     private Integer channelId;
@@ -109,7 +109,7 @@ public class WmNews implements Serializable {
     private Long articleId;
 
     /**
-     * //图片用逗号分隔
+     * //图片用逗号分隔,封面图片
      */
     @TableField("images")
     private String images;

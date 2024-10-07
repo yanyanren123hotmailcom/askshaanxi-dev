@@ -47,7 +47,7 @@ public class AuthFilter implements GlobalFilter {
                 return response.setComplete();
             }
             //获取用户id
-            String useId = (String)claimsBody.get("id");
+            String useId = String.valueOf(claimsBody.get("id"));
             //添加userId到header
             ServerHttpRequest serverHttpRequest = request.mutate().headers(httpHeaders -> {
                 httpHeaders.add("userId", useId + "");
