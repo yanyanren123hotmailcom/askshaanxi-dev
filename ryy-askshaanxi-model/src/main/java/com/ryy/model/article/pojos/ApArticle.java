@@ -60,13 +60,10 @@ public class ApArticle implements Serializable {
     private Short layout;
 
     /**
-     * 文章标记  0 需人工审核   1 正常发布   2 发布失败   3 未提交
+     * 文章标记  0 普通文章   1 热点文章   2 置顶文章   3 精品文章   4 大V 文章
      */
     private Byte flag;
-    /**
-     * 文章状态  0 草稿   1 提交
-     */
-    private Byte type;
+
     /**
      * 文章状态  0 未解决   1 已解决
      */
@@ -74,7 +71,7 @@ public class ApArticle implements Serializable {
     private Boolean isAnswered;
 
     /**
-     * 文章封面图片 多张逗号分隔
+     * 文章封面图片,多张逗号分隔
      */
     private String images;
 
@@ -89,6 +86,12 @@ public class ApArticle implements Serializable {
     private Integer votes;
 
     /**
+     * 收藏数量
+     */
+    @TableField("collections")
+    private Integer collections;
+
+    /**
      * 评论数量
      */
     private Integer comments;
@@ -98,6 +101,23 @@ public class ApArticle implements Serializable {
      */
     private Integer views;
 
+    /**
+     * 省市
+     */
+    @TableField("province_id")
+    private Integer provinceId;
+
+    /**
+     * 市区
+     */
+    @TableField("city_id")
+    private Integer cityId;
+
+    /**
+     * 区县
+     */
+    @TableField("county_id")
+    private Integer countyId;
 
     /**
      * 创建时间
@@ -116,6 +136,7 @@ public class ApArticle implements Serializable {
      */
     @TableField("sync_status")
     private Boolean syncStatus;
+
 
     /**
      * 静态页面地址

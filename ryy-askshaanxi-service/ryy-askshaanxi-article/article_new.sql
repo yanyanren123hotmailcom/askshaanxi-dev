@@ -27,17 +27,20 @@ CREATE TABLE `ap_article` (
                               `title` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '标题',
                               `author_id` int(11) unsigned DEFAULT NULL COMMENT '文章作者的ID',
                               `author_name` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '作者昵称',
-                              `power_id` int(10) unsigned DEFAULT NULL COMMENT '文章请求权力部门ID',
+                              `power_id` int(10) unsigned DEFAULT NULL COMMENT '文章所属频道ID',
                               `power_name` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '文章请求权力部门名称',
                               `layout` tinyint(1) unsigned DEFAULT NULL COMMENT '文章布局\r\n            0 无图文章\r\n            1 单图文章\r\n            2 多图文章',
-                              `flag` tinyint(3) unsigned DEFAULT NULL COMMENT '文章标记\r\n    0需人工审核 1正常发布 2发布失败3未提交\r\n',
-                              `type` tinyint(3) unsigned DEFAULT NULL COMMENT '文章状态\r\n    0草稿 1 提交\r\n',
+                              `flag` tinyint(3) unsigned DEFAULT NULL COMMENT '文章标记\r\n            0 普通文章\r\n            1 热点文章\r\n            2 置顶文章\r\n            3 精品文章\r\n            4 大V 文章',
                               `is_answered` tinyint(1) unsigned DEFAULT NULL COMMENT '文章问题是否已解决\r\n            0 未解决\r\n            1已解决\r\n',
                               `images` varchar(1000) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '文章图片\r\n            多张逗号分隔',
                               `labels` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '文章标签最多3个 逗号分隔',
                               `votes` int(5) unsigned DEFAULT NULL COMMENT '投票数量',
+                              `collections` int(5) unsigned DEFAULT NULL COMMENT '收藏数量',
                               `comments` int(5) unsigned DEFAULT NULL COMMENT '评论数量',
                               `views` int(5) unsigned DEFAULT NULL COMMENT '阅读数量',
+                              `province_id` int(11) unsigned DEFAULT NULL COMMENT '省市',
+                              `city_id` int(11) unsigned DEFAULT NULL COMMENT '市区',
+                              `county_id` int(11) unsigned DEFAULT NULL COMMENT '区县',
                               `created_time` datetime DEFAULT NULL COMMENT '创建时间',
                               `publish_time` datetime DEFAULT NULL COMMENT '发布时间',
                               `sync_status` tinyint(1) DEFAULT '0' COMMENT '同步状态',
@@ -48,26 +51,65 @@ CREATE TABLE `ap_article` (
 -- ----------------------------
 -- Records of ap_article
 -- ----------------------------
-INSERT INTO `ap_article` VALUES ('1302862387124125698', '什么是Java语言', '4', 'admin', '1', 'java', '1','1','1','0',null, 'group1/M00/00/00/wKjIgl9V2CqAZe18AAOoOOsvWPc041.png', null, null, null, '2020-09-07 14:52:54', '2020-09-07 14:56:18', '0',null);
-INSERT INTO `ap_article` VALUES ('1302864436297482242', 'Java语言跨平台原理', '4', 'admin', '1', 'java', '1','1','1','0', null, 'group1/M00/00/00/wKjIgl9V2n6AArZsAAGMmaPdt7w502.png', null, null, null, '2020-09-07 15:01:02', '2020-09-07 15:01:02', '0',null);
-INSERT INTO `ap_article` VALUES ('1302864730402078722', '我是一个测试标题', '4', 'admin', '1', 'java', '1','3','0', '0',null, 'group1/M00/00/00/wKjIgl892wqAANwOAAJW8oQUlAc087.jpg', null, null, null, '2020-09-07 15:02:12', '2020-09-07 15:02:12', '0',  null);
-INSERT INTO `ap_article` VALUES ('1302865008438296577', '过山车故障20名游客倒挂空中', '4', 'admin', '1', 'java', '3','1','1', '0',null, 'group1/M00/00/00/wKjIgl892wqAANwOAAJW8oQUlAc087.jpg,group1/M00/00/00/wKjIgl892xmAG_yjAAB6OkkuJd4819.jpg,group1/M00/00/00/wKjIgl892wKAZLhtAASZUi49De0836.jpg', null, null,null,'2020-09-07 15:03:19', '2020-09-07 15:03:19', '0', null);
-INSERT INTO `ap_article` VALUES ('1302865306489733122', '武汉高校开学典礼万人歌唱祖国', '4', 'admin', '1', 'java', '3','1','1','0', null, 'group1/M00/00/00/wKjIgl892vuAXr_MAASCMYD0yzc919.jpg,group1/M00/00/00/wKjIgl892xGANV6qAABzWOH8KDY775.jpg,group1/M00/00/00/wKjIgl892wqAANwOAAJW8oQUlAc087.jpg', null, null, null, '2020-09-07 15:04:30', '2020-09-07 15:04:30', '0', null);
-INSERT INTO `ap_article` VALUES ('1302865474094120961', '天降铁球砸死女婴整栋楼被判赔', '4', 'admin', '1', 'java', '1','1','1','0', null, 'group1/M00/00/00/wKjIgl892tyAFc60AAMUNUuOKPA619.jpg', null, null, null, '2020-09-07 15:05:10', '2020-09-07 15:05:10', '0', null);
-INSERT INTO `ap_article` VALUES ('1302977178887004162', '央视曝光境外医疗豪华旅游套路', '4', 'admin', '1', 'java', '0','1','1','0', null, 'group1/M00/00/00/wKjIgl892wqAANwOAAJW8oQUlAc087.jpg', null, null, null, '2020-09-07 22:29:02', '2020-09-07 22:29:02', '0', null);
-INSERT INTO `ap_article` VALUES ('1302977458215067649', '10多名陌生人合力托举悬窗女童', '4', 'admin', '1', 'java', '1','1','1','0', null, 'group1/M00/00/00/wKjIgl892vOASiunAAGzs3UZ1Cg252.jpg', null, null, null, '2020-09-07 22:30:09', '2020-09-07 22:30:09', '0',null);
-INSERT INTO `ap_article` VALUES ('1302977558807060482', '杨澜回应一秒变脸', '4', 'admin', '1', 'java', '1','3','0','0', null, 'group1/M00/00/00/wKjIgl892wKAZLhtAASZUi49De0836.jpg', null, null, null,'2020-09-07 22:30:33', '2020-09-07 22:30:33', '0', null);
-INSERT INTO `ap_article` VALUES ('1302977754114826241', '黄龄工作室发视频回应', '4', 'admin', '4', 'Python', '1','0','1','0', null, 'group1/M00/00/00/wKjIgl892vuAXr_MAASCMYD0yzc919.jpg', null, null, null, '2020-09-07 22:31:19', '2020-09-07 22:31:19', '0',null);
-INSERT INTO `ap_article` VALUES ('1302977754114826242', '黄龄工作室发视频回应', '4', 'admin', '4', 'Python', '1','2','1', '0',null, 'group1/M00/00/00/wKjIgl892vuAXr_MAASCMYD0yzc919.jpg', null, null, null, '2020-09-07 22:31:19', '2020-09-07 22:31:19', '0', null);
-INSERT INTO `ap_article` VALUES ('1302977754114826243', '黄龄工作室发视频回应', '4', 'admin', '4', 'Python', '1','1','1', '0',null, 'group1/M00/00/00/wKjIgl892vuAXr_MAASCMYD0yzc919.jpg', null, null, null,'2020-09-07 22:31:19', '2020-09-07 22:31:19', '0', null);
-INSERT INTO `ap_article` VALUES ('1303156149041758210', '全国抗击新冠肺炎疫情表彰大会', '4', 'admin', '1', 'java', '1','1','1','0', null, 'group1/M00/00/00/wKjIgl9W6iOAD2doAAFY4E1K7-g384.png', null, null, null, '2020-09-08 10:20:12', '2020-09-08 10:20:12', '0', null);
-INSERT INTO `ap_article` VALUES ('1383827787629252610', 'Kafka文件的存储机制', '4', 'admin', '1', 'java', '1','1','1','0', null, 'http://192.168.200.130:9000/leadnews/2021/4/20210418/4a498d9cf3614570ac0cb2da3e51c164.jpg', null, null, null, '2021-04-19 01:00:29', '2021-04-19 00:20:17','0', null);
-INSERT INTO `ap_article` VALUES ('1383827888816836609', '为什么项目经理不喜欢重构？', '4', 'admin', '1', 'java', '1','1','1','0', null, 'http://192.168.200.130:9000/leadnews/2021/4/20210418/4a498d9cf3614570ac0cb2da3e51c164.jpg', null, null, null, '2021-04-19 01:00:54', '2021-04-19 00:19:09', '0', null);
-INSERT INTO `ap_article` VALUES ('1383827911810011137', 'Base64编解码原理', '4', 'admin', '1', 'java', '1','2','1','0', null, 'http://192.168.200.130:9000/leadnews/2021/4/20210418/b44c65376f12498e873223d9d6fdf523.jpg', null, null, null, '2021-04-19 01:00:59', '2021-04-19 00:17:42', '0', null);
-INSERT INTO `ap_article` VALUES ('1383827952326987778', '工作线程数是不是设置的越大越好', '4', 'admin', '1', 'java', '1','1','1','0', null, 'http://192.168.200.130:9000/leadnews/2021/4/20210418/a3f0bc438c244f788f2df474ed8ecdc1.jpg', null, null, null,  '2021-04-19 01:01:09', '2021-04-19 00:16:52', '0', null);
-INSERT INTO `ap_article` VALUES ('1383827976310018049', '小白如何辨别其真与伪&好与坏？', '4', 'admin', '1', 'java', '1','1','1','0', null, 'http://192.168.200.130:9000/leadnews/2021/4/20210418/1818283261e3401892e1383c1bd00596.jpg', null, null, null,'2021-04-19 01:01:14', '2021-04-19 00:14:58', '0', null);
-INSERT INTO `ap_article` VALUES ('1383827995813531650', '学IT，为什么要学项目课程？', '4', 'admin', '1', 'java', '3','1','1','0', null, 'http://192.168.200.130:9000/leadnews/2021/4/20210418/7d0911a41a3745efa8509a87f234813c.jpg,http://192.168.200.130:9000/leadnews/2021/4/20210418/c7c3d36d25504cf6aecdcd5710261773.jpg,http://192.168.200.130:9000/leadnews/2021/4/20210418/e8113ad756a64ea6808f91130a6cd934.jpg', null, null, null,'2021-04-19 01:01:19', '2021-04-19 00:10:48', '0', null);
-INSERT INTO `ap_article` VALUES ('1383828014629179393', '“真”项目课程对找工作有什么帮助？', '4', 'admin', '1', 'java', '1','0','1','0', null, 'http://192.168.200.130:9000/leadnews/2021/4/20210418/7d0911a41a3745efa8509a87f234813c.jpg', null, null, null, '2021-04-19 01:01:24', '2021-04-19 00:08:05', '0', null);
+INSERT INTO `ap_article` VALUES ('1302862387124125698', '什么是Java语言', '4', 'admin', '1', 'java', '1', null, 0,'group1/M00/00/00/wKjIgl9V2CqAZe18AAOoOOsvWPc041.png', null, null, null, null, null, null, null, null, '2020-09-07 14:52:54', '2020-09-07 14:56:18', '0',  null);
+INSERT INTO `ap_article` VALUES ('1302864436297482242', 'Java语言跨平台原理', '4', 'admin', '1', 'java', '1', null,0, 'group1/M00/00/00/wKjIgl9V2n6AArZsAAGMmaPdt7w502.png', null, null, null, null, null, null, null, null, '2020-09-07 15:01:02', '2020-09-07 15:01:02', '0', null);
+INSERT INTO `ap_article` VALUES ('1302864730402078722', '我是一个测试标题', '4', 'admin', '1', 'java', '1', null, 0,'group1/M00/00/00/wKjIgl892wqAANwOAAJW8oQUlAc087.jpg', null, null, null, null, null, null, null, null, '2020-09-07 15:02:12', '2020-09-07 15:02:12', '0',  null);
+INSERT INTO `ap_article` VALUES ('1302865008438296577', '过山车故障20名游客倒挂空中', '4', 'admin', '1', 'java', '3', null,0, 'group1/M00/00/00/wKjIgl892wqAANwOAAJW8oQUlAc087.jpg,group1/M00/00/00/wKjIgl892xmAG_yjAAB6OkkuJd4819.jpg,group1/M00/00/00/wKjIgl892wKAZLhtAASZUi49De0836.jpg', null, null, null, null, null, null, null, null, '2020-09-07 15:03:19', '2020-09-07 15:03:19', '0',  null);
+INSERT INTO `ap_article` VALUES ('1302865306489733122', '武汉高校开学典礼万人歌唱祖国', '4', 'admin', '1', 'java', '3', null, 0,'group1/M00/00/00/wKjIgl892vuAXr_MAASCMYD0yzc919.jpg,group1/M00/00/00/wKjIgl892xGANV6qAABzWOH8KDY775.jpg,group1/M00/00/00/wKjIgl892wqAANwOAAJW8oQUlAc087.jpg', null, null, null, null, null, null, null, null, '2020-09-07 15:04:30', '2020-09-07 15:04:30', '0', null);
+INSERT INTO `ap_article` VALUES ('1302865474094120961', '天降铁球砸死女婴整栋楼被判赔', '4', 'admin', '1', 'java', '1', null, 0,'group1/M00/00/00/wKjIgl892tyAFc60AAMUNUuOKPA619.jpg', null, null, null, null, null, null, null, null, '2020-09-07 15:05:10', '2020-09-07 15:05:10', '0',  null);
+INSERT INTO `ap_article` VALUES ('1302977178887004162', '央视曝光境外医疗豪华旅游套路', '4', 'admin', '1', 'java', '0', null,0, 'group1/M00/00/00/wKjIgl892wqAANwOAAJW8oQUlAc087.jpg', null, null, null, null, null, null, null, null, '2020-09-07 22:29:02', '2020-09-07 22:29:02', '0', null);
+INSERT INTO `ap_article` VALUES ('1302977458215067649', '10多名陌生人合力托举悬窗女童', '4', 'admin', '1', 'java', '1', null,0, 'group1/M00/00/00/wKjIgl892vOASiunAAGzs3UZ1Cg252.jpg', null, null, null, null, null, null, null, null, '2020-09-07 22:30:09', '2020-09-07 22:30:09', '0',  null);
+INSERT INTO `ap_article` VALUES ('1302977558807060482', '杨澜回应一秒变脸', '4', 'admin', '1', 'java', '1', null, 0,'group1/M00/00/00/wKjIgl892wKAZLhtAASZUi49De0836.jpg', null, null, null, null, null, null, null, null, '2020-09-07 22:30:33', '2020-09-07 22:30:33', '0', null);
+INSERT INTO `ap_article` VALUES ('1302977754114826241', '黄龄工作室发视频回应', '4', 'admin', '4', 'Python', '1', null,0, 'group1/M00/00/00/wKjIgl892vuAXr_MAASCMYD0yzc919.jpg', null, null, null, null, null, null, null, null, '2020-09-07 22:31:19', '2020-09-07 22:31:19', '0', null);
+INSERT INTO `ap_article` VALUES ('1302977754114826242', '黄龄工作室发视频回应', '4', 'admin', '4', 'Python', '1', null,0, 'group1/M00/00/00/wKjIgl892vuAXr_MAASCMYD0yzc919.jpg', '', null, null, null, null, null, null, null, '2020-09-07 22:31:19', '2020-09-07 22:31:19', '0', null);
+INSERT INTO `ap_article` VALUES ('1302977754114826243', '黄龄工作室发视频回应', '4', 'admin', '4', 'Python', '1', null,0, 'group1/M00/00/00/wKjIgl892vuAXr_MAASCMYD0yzc919.jpg', '', null, null, null, null, null, null, null, '2020-09-07 22:31:19', '2020-09-07 22:31:19', '0',  null);
+INSERT INTO `ap_article` VALUES ('1303156149041758210', '全国抗击新冠肺炎疫情表彰大会', '4', 'admin', '1', 'java', '1',0, null, 'group1/M00/00/00/wKjIgl9W6iOAD2doAAFY4E1K7-g384.png', null, null, null, null, null, null, null, null, '2020-09-08 10:20:12', '2020-09-08 10:20:12', '0',null);
+INSERT INTO `ap_article` VALUES ('1383827787629252610', 'Kafka文件的存储机制', '4', 'admin', '1', 'java', '1', null,0, 'http://192.168.200.130:9000/leadnews/2021/4/20210418/4a498d9cf3614570ac0cb2da3e51c164.jpg', null, null, null, null, null, null, null, null, '2021-04-19 01:00:29', '2021-04-19 00:20:17', '0', null);
+INSERT INTO `ap_article` VALUES ('1383827888816836609', '为什么项目经理不喜欢重构？', '4', 'admin', '1', 'java', '1', null,0, 'http://192.168.200.130:9000/leadnews/2021/4/20210418/4a498d9cf3614570ac0cb2da3e51c164.jpg', null, null, null, null, null, null, null, null, '2021-04-19 01:00:54', '2021-04-19 00:19:09', '0',  null);
+INSERT INTO `ap_article` VALUES ('1383827911810011137', 'Base64编解码原理', '4', 'admin', '1', 'java', '1', null,0, 'http://192.168.200.130:9000/leadnews/2021/4/20210418/b44c65376f12498e873223d9d6fdf523.jpg', null, null, null, null, null, null, null, null, '2021-04-19 01:00:59', '2021-04-19 00:17:42', '0', null);
+INSERT INTO `ap_article` VALUES ('1383827952326987778', '工作线程数是不是设置的越大越好', '4', 'admin', '1', 'java', '1', null,0, 'http://192.168.200.130:9000/leadnews/2021/4/20210418/a3f0bc438c244f788f2df474ed8ecdc1.jpg', null, null, null, null, null, null, null, null, '2021-04-19 01:01:09', '2021-04-19 00:16:52', '0', null);
+INSERT INTO `ap_article` VALUES ('1383827976310018049', '小白如何辨别其真与伪&好与坏？', '4', 'admin', '1', 'java', '1', null,0, 'http://192.168.200.130:9000/leadnews/2021/4/20210418/1818283261e3401892e1383c1bd00596.jpg', null, null, null, null, null, null, null, null, '2021-04-19 01:01:14', '2021-04-19 00:14:58', '0', null);
+INSERT INTO `ap_article` VALUES ('1383827995813531650', '学IT，为什么要学项目课程？', '4', 'admin', '1', 'java', '3', null,0, 'http://192.168.200.130:9000/leadnews/2021/4/20210418/7d0911a41a3745efa8509a87f234813c.jpg,http://192.168.200.130:9000/leadnews/2021/4/20210418/c7c3d36d25504cf6aecdcd5710261773.jpg,http://192.168.200.130:9000/leadnews/2021/4/20210418/e8113ad756a64ea6808f91130a6cd934.jpg', null, null, null, null, null, null, null, null, '2021-04-19 01:01:19', '2021-04-19 00:10:48', '0',  null);
+INSERT INTO `ap_article` VALUES ('1383828014629179393', '“真”项目课程对找工作有什么帮助？', '4', 'admin', '1', 'java', '1', null, 0,'http://192.168.200.130:9000/leadnews/2021/4/20210418/7d0911a41a3745efa8509a87f234813c.jpg', null, null, null, null, null, null, null, null, '2021-04-19 01:01:24', '2021-04-19 00:08:05', '0',  null);
+
+-- ----------------------------
+-- Table structure for ap_article_config
+-- ----------------------------
+DROP TABLE IF EXISTS `ap_article_config`;
+CREATE TABLE `ap_article_config` (
+                                     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                     `article_id` bigint(20) unsigned DEFAULT NULL COMMENT '文章ID',
+                                     `is_comment` tinyint(1) unsigned DEFAULT NULL COMMENT '是否可评论',
+                                     `is_forward` tinyint(1) unsigned DEFAULT NULL COMMENT '是否转发',
+                                     `is_down` tinyint(1) unsigned DEFAULT NULL COMMENT '是否下架',
+                                     `is_delete` tinyint(1) unsigned DEFAULT NULL COMMENT '是否已删除',
+                                     PRIMARY KEY (`id`) USING BTREE,
+                                     KEY `idx_article_id` (`article_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1383828014645956610 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='APP已发布文章配置表';
+
+-- ----------------------------
+-- Records of ap_article_config
+-- ----------------------------
+INSERT INTO `ap_article_config` VALUES ('1302862387933626369', '1302862387124125698', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1302864437425750018', '1302864436297482242', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1302864731203190785', '1302864730402078722', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1302865009533009922', '1302865008438296577', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1302865307408285697', '1302865306489733122', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1302865475297886209', '1302865474094120961', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1302977180199821313', '1302977178887004162', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1302977459322363905', '1302977458215067649', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1302977559788527618', '1302977558807060482', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1302977754882383873', '1302977754114826241', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1302977754882383874', '1302977754114826242', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1302977754882383875', '1302977754114826243', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1303156149909979137', '1303156149041758210', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1383827787704750082', '1383827787629252610', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1383827888829419522', '1383827888816836609', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1383827911822594049', '1383827911810011137', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1383827952326987779', '1383827952326987778', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1383827976322600962', '1383827976310018049', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1383827995821920257', '1383827995813531650', '1', '1', '0', '0');
+INSERT INTO `ap_article_config` VALUES ('1383828014645956609', '1383828014629179393', '1', '1', '0', '0');
 
 -- ----------------------------
 -- Table structure for ap_article_content
@@ -103,6 +145,28 @@ INSERT INTO `ap_article_content` VALUES ('1383827976322600963', '138382797631001
 INSERT INTO `ap_article_content` VALUES ('1383827995834503170', '1383827995813531650', '[{\"type\":\"text\",\"value\":\"在选择IT培训机构时，你应该有注意到，很多机构都将“项目课程”作为培训中的重点。那么，为什么要学习项目课程?为什么项目课程才是IT培训课程的核心?\\n\\n　　1\\n\\n　　在这个靠“技术经验说话”的IT行业里，假如你是一个计算机或IT相关专业毕业生，在没有实际项目开发经验的情况下，“找到第一份全职工作”可能是你职业生涯中遇到的最大挑战。\\n\\n　　为什么说找第一份工作很难?\\n\\n　　主要在于：实际企业中用到的软件开发知识和在学校所学的知识是完全不同的。假设你已经在学校和同学做过周期长达2-3个月的项目，但真正工作中的团队协作与你在学校中经历的协作也有很多不同。\"},{\"type\":\"image\",\"value\":\"http://192.168.200.130:9000/leadnews/2021/4/20210418/e8113ad756a64ea6808f91130a6cd934.jpg\"},{\"type\":\"text\",\"value\":\"在实际团队中，每一位成员彼此团结一致，为项目的交付而努力，这也意味着你必须要理解好在项目中负责的那部分任务，在规定时间交付还需确保你负责的功能，在所有环境中都能很好地发挥作用，而不仅仅是你的本地机器。\\n\\n　　这需要你对项目中的每一行代码严谨要求。学校练习的项目中，对bug的容忍度很大，而在实际工作中是绝对不能容忍的。项目中的任何一个环节都涉及公司利益，任何一个bug都可能影响公司的收入及形象。\"},{\"type\":\"image\",\"value\":\"http://192.168.200.130:9000/leadnews/2021/4/20210418/c7c3d36d25504cf6aecdcd5710261773.jpg\"}]');
 INSERT INTO `ap_article_content` VALUES ('1383828014650150914', '1383828014629179393', '[{\"type\":\"text\",\"value\":\"找工作，企业重点问的是项目经验，更是HR筛选的“第一门槛”，直接决定了你是否有机会进入面试环节。\\n\\n　　项目经验更是评定“个人能力/技能”真实性的“证据”，反映了求职者某个方面的实际动手能力、对某个领域或某种技能的掌握程度。\"},{\"type\":\"image\",\"value\":\"http://192.168.200.130:9000/leadnews/2021/4/20210418/7d0911a41a3745efa8509a87f234813c.jpg\"},{\"type\":\"text\",\"value\":\"很多经过培训期望快速上岗的程序员，靠着培训机构“辅导”顺利经过面试官对于“项目经验”的考核上岗后，在面对“有限时间”“复杂业务”“新项目需求”等多项标签加持的工作任务，却往往不知从何下手或开发进度极其缓慢。最终结果就是：熬不过试用期。\\n\\n　　从而也引发了企业对于“培训出身程序员”的“有色眼光”。你甚至也一度怀疑“IT培训班出来的人真的不行吗?”\"}]');
 
+-- ----------------------------
+-- Table structure for ap_author
+-- ----------------------------
+DROP TABLE IF EXISTS `ap_author`;
+CREATE TABLE `ap_author` (
+                             `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+                             `name` varchar(20) DEFAULT NULL COMMENT '作者名称',
+                             `type` tinyint(1) unsigned DEFAULT NULL COMMENT '0 爬取数据\r\n            1 签约合作商\r\n            2 平台自媒体人\r\n            ',
+                             `user_id` int(11) unsigned DEFAULT NULL COMMENT '社交账号ID',
+                             `created_time` datetime DEFAULT NULL COMMENT '创建时间',
+                             `wm_user_id` int(11) unsigned DEFAULT NULL COMMENT '自媒体账号',
+                             PRIMARY KEY (`id`),
+                             UNIQUE KEY `idx_type_name` (`type`,`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='APP文章作者信息表';
+
+-- ----------------------------
+-- Records of ap_author
+-- ----------------------------
+INSERT INTO `ap_author` VALUES ('1', 'zhangsan', '2', '1', '2020-03-19 23:43:54', null);
+INSERT INTO `ap_author` VALUES ('2', 'lisi', '2', '2', '2020-03-19 23:47:44', null);
+INSERT INTO `ap_author` VALUES ('3', 'wangwu', '2', '3', '2020-03-19 23:50:09', null);
+INSERT INTO `ap_author` VALUES ('4', 'admin', '2', '4', '2020-03-30 16:36:41', null);
 
 -- ----------------------------
 -- Table votes from ap_user
@@ -122,7 +186,7 @@ CREATE TABLE `article_votes` (
 -- ----------------------------
 
 -- ----------------------------
--- Table votes from ap_user
+-- Table comments from ap_user
 -- ----------------------------
 DROP TABLE IF EXISTS `article_comments`;
 CREATE TABLE `article_comments` (
@@ -136,5 +200,5 @@ CREATE TABLE `article_comments` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1383828014650150915 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='APP已发布文章内容表';
 
 -- ----------------------------
--- Records of article_votes
+-- Records of article_comments
 -- ----------------------------

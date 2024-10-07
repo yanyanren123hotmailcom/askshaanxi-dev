@@ -12,5 +12,6 @@ import java.util.List;
 public interface ApArticleMapper extends BaseMapper<ApArticle> {
 
     public List<ApArticle> loadArticleList(@Param("dto") ArticleHomeDto dto, @Param("loadType") Short type);
+    public List<ApArticle> selectAll();
 
 }

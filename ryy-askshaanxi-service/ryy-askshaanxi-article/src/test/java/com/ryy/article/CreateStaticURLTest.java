@@ -2,7 +2,6 @@ package com.ryy.article;
 
 
 import com.alibaba.fastjson.JSONArray;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ryy.article.mapper.ApArticleContentMapper;
@@ -47,7 +46,7 @@ public class CreateStaticURLTest {
     public void createStaticUrlTest() throws IOException, TemplateException {
 
         //获取所有文章
-        List<ApArticle> articleList=apArticleMapper.selectList(new QueryWrapper<ApArticle>().lambda());
+        List<ApArticle> articleList=apArticleMapper.selectAll();
 
         for (ApArticle article : articleList) {
             //获取文章内容
@@ -70,7 +69,10 @@ public class CreateStaticURLTest {
 
                 //修改ap_article表
                 article.setStaticUrl(path);
-                apArticleMapper.updateById(article);
+                apArticleMapper.deleteById(article.getId());
+                //apArticleMapper.delete(Wrappers.<ApArticle>lambdaQuery().eq(ApArticle::getId,article.getId()));
+                apArticleMapper.insert(article);
+                //apArticleMapper.updateById(article);
             }
         }
     }

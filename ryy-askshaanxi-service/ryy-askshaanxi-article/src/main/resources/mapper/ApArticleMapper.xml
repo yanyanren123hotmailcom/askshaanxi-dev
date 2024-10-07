@@ -11,39 +11,42 @@
         <result column="power_name" property="powerName"/>
         <result column="layout" property="layout"/>
         <result column="flag" property="flag"/>
-        <result column="type" property="type"/>
         <result column="is_answered" property="isAnswered"/>
         <result column="images" property="images"/>
         <result column="labels" property="labels"/>
         <result column="votes" property="votes"/>
-        <result column="comment" property="comment"/>
+        <result column="collections" property="collections"/>
+        <result column="comments" property="comments"/>
         <result column="views" property="views"/>
+        <result column="province_id" property="provinceId"/>
+        <result column="city_id" property="cityId"/>
+        <result column="county_id" property="countyId"/>
         <result column="created_time" property="createdTime"/>
         <result column="publish_time" property="publishTime"/>
         <result column="sync_status" property="syncStatus"/>
         <result column="static_url" property="staticUrl"/>
     </resultMap>
+    <select id="selectAll" resultMap="resultMap">
+        SELECT * FROM `ap_article`
+    </select>
     <select id="loadArticleList" resultMap="resultMap">
-        SELECT
-        aa.*
-        FROM
-        `ap_article` aa
+        SELECT aa.* FROM `ap_article` aa LEFT JOIN ap_article_config aac ON aa.id = aac.article_id
         <where>
-            and aa.flag = 1
-            <!-- loadmore -->
-            <if test="loadType != null and loadType == 1">
-                and aa.publish_time <![CDATA[<]]> #{dto.minBehotTime}
+            and aac.is_delete != 1 and aac.is_down != 1
+            <!--  loadmore  -->
+            <if test="type != null and type == 1">
+                and aa.publish_time
+                <![CDATA[ < ]]>
+                #{dto.minBehotTime}
             </if>
-            <!-- loadnew -->
-            <if test="loadType != null and loadType == 2">
-                and aa.publish_time <![CDATA[>]]> #{dto.maxBehotTime}
+            <if test="type != null and type == 2">
+                and aa.publish_time
+                <![CDATA[ > ]]>
+                #{dto.maxBehotTime}
             </if>
-            <if test="dto.tag != '__all__'">
-                and aa.power_id = #{dto.tag}
-            </if>
+            <if test="dto.tag != '__all__'"> and aa.power_id = #{dto.tag} </if>
         </where>
-        order by aa.publish_time desc
-        limit #{dto.size}
+        order by aa.publish_time desc limit #{dto.size}
     </select>
 
 </mapper>
