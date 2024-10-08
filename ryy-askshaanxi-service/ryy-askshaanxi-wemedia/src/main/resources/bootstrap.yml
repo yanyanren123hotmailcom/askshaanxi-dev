@@ -19,8 +19,3 @@ minio:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-aliyun:
-  accessKeyId: LTAI5tKT6PU9kuBqg5AoMzTn
-  secret: cgtBKncB3xWn7J8igE1HxvzwXQivr6
-  #aliyun.scenes=porn,terrorism,ad,qrcode,live,logo
-  scenes: terrorism
