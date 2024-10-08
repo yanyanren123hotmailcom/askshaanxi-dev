@@ -17,7 +17,7 @@ public class ApUserDetails {
      * 主键
      */
     @TableId(value = "id")
-    private Integer id;
+    private Long id;
 
     /**
      * 用户名

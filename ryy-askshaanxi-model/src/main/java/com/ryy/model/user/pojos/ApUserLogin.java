@@ -15,8 +15,8 @@ public class ApUserLogin {
     /**
      * 主键
      */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    @TableId(value = "id", type = IdType.ID_WORKER)
+    private Long id;
 
     /**
      * 密码、通信等加密盐

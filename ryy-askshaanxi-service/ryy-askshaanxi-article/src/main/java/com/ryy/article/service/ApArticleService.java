@@ -1,6 +1,7 @@
 package com.ryy.article.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ryy.model.article.dtos.ArticleDto;
 import com.ryy.model.article.dtos.ArticleHomeDto;
 import com.ryy.model.article.pojos.ApArticle;
 import com.ryy.model.common.dtos.ResponseResult;
@@ -14,5 +15,7 @@ public interface ApArticleService extends IService<ApArticle> {
      * @return
      */
     ResponseResult load(Short loadtype, ArticleHomeDto dto);
+
+    ResponseResult save(ArticleDto dto);
 
 }

@@ -34,7 +34,7 @@ public class ApArticle implements Serializable {
      * 作者id
      */
     @TableField("author_id")
-    private Long authorId;
+    private Integer authorId;
 
     /**
      * 作者名称

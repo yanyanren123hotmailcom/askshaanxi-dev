@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.ryy.common.exception.ExceptionCatch,\
+  com.ryy.common.aliyun.GreenTextScan,\
+  com.ryy.common.aliyun.GreenImageScan

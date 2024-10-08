@@ -3,10 +3,10 @@
 <mapper namespace="com.ryy.wemedia.mapper.WmNewsMaterialMapper">
 
     <insert id="saveRelations">
-        insert into wm_news_material (material_id,news_id,type,ord)
+        insert into wm_news_material (material_id,news_id,type)
         values
-        <foreach collection="materialIds" index="ord" item="mid" separator=",">
-            (#{mid},#{newsId},#{type},#{ord})
+        <foreach collection="materialIds" item="mid" separator=",">
+            (#{mid},#{newsId},#{type})
         </foreach>
     </insert>
 

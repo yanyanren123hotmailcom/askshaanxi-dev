@@ -16,7 +16,7 @@ public class ApUserIdentity {
      * 主键
      */
     @TableId(value = "id")
-    private Integer id;
+    private Long id;
 
     @TableField("real_name")
     private String realName;

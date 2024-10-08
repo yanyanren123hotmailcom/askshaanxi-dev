@@ -21,6 +21,7 @@ import com.ryy.utils.thread.WmThreadLocalUtil;
 import com.ryy.wemedia.mapper.WmMaterialMapper;
 import com.ryy.wemedia.mapper.WmNewsMapper;
 import com.ryy.wemedia.mapper.WmNewsMaterialMapper;
+import com.ryy.wemedia.service.WmNewsAutoScanService;
 import com.ryy.wemedia.service.WmNewsService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +40,8 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
     @Autowired
     private WmMaterialMapper wmMaterialMapper;
 
+    @Autowired
+    private WmNewsAutoScanService wmNewsAutoScanService;
 
     @Autowired
     private WmNewsMaterialMapper wmNewsMaterialMapper;
@@ -123,7 +126,8 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
             String[] imageArray = org.springframework.util.StringUtils.commaDelimitedListToStringArray(coverImages);
             saveRelationsMaterial(Arrays.asList(imageArray),wmNews.getId(),WemediaConstants.WM_COVER_REFERENCE);
         }
-
+        //文章审核
+        wmNewsAutoScanService.autoScanWmNews(wmNews,images);
         return ResponseResult.okResult(wmNews);
     }
 

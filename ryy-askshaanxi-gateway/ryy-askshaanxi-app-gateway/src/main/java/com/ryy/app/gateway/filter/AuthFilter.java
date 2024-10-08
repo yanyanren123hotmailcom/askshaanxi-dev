@@ -25,6 +25,8 @@ public class AuthFilter implements GlobalFilter {
         ServerHttpResponse response= exchange.getResponse();
         String path = request.getURI().getPath();
         if(path.contains("login")){
+            log.info("登录操作，放行-------");
+            log.info(exchange.getRequest().getPath().toString());
             //登录请求放行
             return chain.filter(exchange);
         }

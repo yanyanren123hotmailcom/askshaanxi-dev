@@ -2,6 +2,7 @@ package com.ryy.article.controller.v1;
 
 import com.ryy.article.service.ApArticleService;
 import com.ryy.common.constants.ArticleConstants;
+import com.ryy.model.article.dtos.ArticleDto;
 import com.ryy.model.article.dtos.ArticleHomeDto;
 import com.ryy.model.common.dtos.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,10 @@ public class ArticleHomeController {
     @PostMapping("/loadnew")
     public ResponseResult loadNew(@RequestBody ArticleHomeDto dto) {
         return apArticleService.load(ArticleConstants.LOADTYPE_LOAD_NEW,dto);
+    }
+
+    @PostMapping("/save")
+    public ResponseResult saveArticle(@RequestBody ArticleDto articleDto){
+        return apArticleService.save(articleDto);
     }
 }
