@@ -19,3 +19,13 @@ minio:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+feign:
+  #开启feign对hystrix熔断降级的支持
+  hystrix:
+    enabled: true
+  #修改调用超时时间
+  client:
+    config:
+      default:
+        connect-timeout: 10000
+        read-timeout: 10000

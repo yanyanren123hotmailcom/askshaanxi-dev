@@ -1,10 +1,11 @@
 package com.ryy.wemedia.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ryy.apis.article.IArticleClient;
-import com.ryy.apis.article.IUserClient;
+import com.ryy.apis.user.IUserClient;
 import com.ryy.common.aliyun.GreenImageScan;
 import com.ryy.common.aliyun.GreenTextScan;
 import com.ryy.file.service.FileStorageService;
@@ -20,6 +21,7 @@ import com.ryy.wemedia.service.WmNewsAutoScanService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -54,6 +56,7 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
     private IUserClient iUserClient;
 
     @Override
+    @Async("asyncPool")//此方法异步执行
     public void autoScanWmNews(WmNews news, List<String> contentImages) {
         //审核内容
 //        boolean flag = scanText(news);
@@ -92,7 +95,7 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         articleDto.setId(news.getArticleId());
 
         ResponseResult result=iArticleClient.saveArticle(articleDto);
-        log.info("调用app端保存文章返回：{}",result);
+        log.info("调用app端保存文章返回：{}", JSON.toJSONString(result));
         //同步成功
         if(result.getCode()== AppHttpCodeEnum.SUCCESS.getCode()){
             //更新自媒体数据的文章id与状态
