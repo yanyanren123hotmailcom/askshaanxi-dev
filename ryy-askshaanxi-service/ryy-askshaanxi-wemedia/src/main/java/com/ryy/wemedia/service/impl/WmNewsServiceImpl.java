@@ -1,6 +1,7 @@
 package com.ryy.wemedia.service.impl;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -9,6 +10,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ryy.common.constants.WemediaConstants;
+import com.ryy.common.constants.WmNewsMessageConstants;
+import com.ryy.common.tess4j.Tess4jClient;
 import com.ryy.model.common.dtos.PageResponseResult;
 import com.ryy.model.common.dtos.ResponseResult;
 import com.ryy.model.common.enums.AppHttpCodeEnum;
@@ -27,9 +30,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,7 +53,11 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
 
     @Autowired
     private WmNewsMaterialMapper wmNewsMaterialMapper;
+    @Autowired
+    private Tess4jClient tess4jClient;
 
+//    @Autowired
+//    private Tess4jClient tesseract;
     /**
      * 条件查询文章列表
      *
@@ -126,8 +138,31 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
             String[] imageArray = org.springframework.util.StringUtils.commaDelimitedListToStringArray(coverImages);
             saveRelationsMaterial(Arrays.asList(imageArray),wmNews.getId(),WemediaConstants.WM_COVER_REFERENCE);
         }
+        StringBuilder textInImages=new StringBuilder();
+
+        //获取所有图片中的文字
+        for (String image : images) {
+            try {
+
+                    // 创建一个URL对象
+                    URL url = new URL(image);
+                    // 打开连接
+                    InputStream is = url.openStream();
+                    // 读取图像数据
+                    BufferedImage bufferedImage = ImageIO.read(is);
+                    // 关闭输入流
+                    is.close();
+                    // 返回BufferedImage对象
+
+                textInImages.append("-");
+                textInImages.append(tess4jClient.doOCR(bufferedImage));
+            }catch (Exception e){
+                return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST,"图片不存在，识别文字失败");
+            }
+
+        }
         //文章审核
-        wmNewsAutoScanService.autoScanWmNews(wmNews,images);
+        wmNewsAutoScanService.autoScanWmNews(wmNews,images,textInImages.toString());
         return ResponseResult.okResult(wmNews);
     }
 
@@ -226,6 +261,42 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
             updateById(wmNews);
         }
     }
+    @Autowired
+    private KafkaTemplate<String,String> kafkaTemplate;
 
+    @Override
+    public ResponseResult downOrUp(WmNewsDto dto) {
+        //1.检查参数
+        if(dto.getId() == null){
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+
+        //2.查询文章
+        WmNews wmNews = getById(dto.getId());
+        if(wmNews == null){
+            return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST,"文章不存在");
+        }
+
+        //3.判断文章是否已发布
+        if(!wmNews.getStatus().equals(WmNews.Status.PUBLISHED.getCode())){
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID,"当前文章不是发布状态，不能上下架");
+        }
+
+        //4.修改文章enable
+        if(dto.getEnable() != null && dto.getEnable() > -1 && dto.getEnable() < 2){
+            update(Wrappers.<WmNews>lambdaUpdate().set(WmNews::getEnable,dto.getEnable())
+                    .eq(WmNews::getId,wmNews.getId()));
+
+            if(wmNews.getArticleId() != null){
+                //发送消息，通知article修改文章的配置
+                Map<String,Object> map = new HashMap<>();
+                map.put("articleId",wmNews.getArticleId());
+                map.put("enable",dto.getEnable());
+                kafkaTemplate.send(WmNewsMessageConstants.WM_NEWS_UP_OR_DOWN_TOPIC, JSON.toJSONString(map));
+            }
+
+        }
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
 
 }

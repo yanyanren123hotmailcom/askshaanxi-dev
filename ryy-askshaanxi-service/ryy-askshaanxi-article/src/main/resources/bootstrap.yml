@@ -26,3 +26,9 @@ minio:
   bucket: askshaanxi
   endpoint: http://192.168.200.130:9000
   readPath: http://192.168.200.130:9000
+kafka:
+  bootstrap-servers: 192.168.200.130:9092
+  consumer:
+    group-id: ${spring.application.name}
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
