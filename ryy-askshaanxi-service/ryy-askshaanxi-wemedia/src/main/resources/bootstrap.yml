@@ -29,13 +29,16 @@ feign:
       default:
         connect-timeout: 10000
         read-timeout: 10000
-kafka:
-  bootstrap-servers: 192.168.200.130:9092
-  producer:
-    retries: 10
-    key-serializer: org.apache.kafka.common.serialization.StringSerializer
-    value-serializer: org.apache.kafka.common.serialization.StringSerializer
-  consumer:
-    group-id: ${spring.application.name}
-    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  kafka:
+    bootstrap-servers: 192.168.200.130:9092
+    producer:
+      retries: 10
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: ${spring.application.name}-test
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+tess4j:
+  data-path: E:\ask-shaanxi\ryy-askshaanxi-common\src\main\resources\chinese-font-library
+  language: chi_sim

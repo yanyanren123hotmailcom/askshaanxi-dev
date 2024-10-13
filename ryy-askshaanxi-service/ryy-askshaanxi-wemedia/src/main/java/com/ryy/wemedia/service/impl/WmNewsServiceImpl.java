@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ryy.common.constants.WemediaConstants;
 import com.ryy.common.constants.WmNewsMessageConstants;
 import com.ryy.common.tess4j.Tess4jClient;
+import com.ryy.file.service.FileStorageService;
 import com.ryy.model.common.dtos.PageResponseResult;
 import com.ryy.model.common.dtos.ResponseResult;
 import com.ryy.model.common.enums.AppHttpCodeEnum;
@@ -36,8 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.InputStream;
-import java.net.URL;
+import java.io.ByteArrayInputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -110,6 +110,9 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         return responseResult;
     }
 
+    @Autowired
+    private FileStorageService fileStorageService;
+
     /**
      * 发布修改文章或保存为草稿
      * @param dto
@@ -143,16 +146,13 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         //获取所有图片中的文字
         for (String image : images) {
             try {
-
-                    // 创建一个URL对象
-                    URL url = new URL(image);
-                    // 打开连接
-                    InputStream is = url.openStream();
-                    // 读取图像数据
-                    BufferedImage bufferedImage = ImageIO.read(is);
-                    // 关闭输入流
-                    is.close();
-                    // 返回BufferedImage对象
+                byte[] bytes = fileStorageService.downLoadFile(image);
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+                // 使用 ImageIO.read 从输入流中读取图像
+                BufferedImage bufferedImage = ImageIO.read(inputStream);
+                // 关闭输入流
+                inputStream.close();
+                // 返回BufferedImage对象
 
                 textInImages.append("-");
                 textInImages.append(tess4jClient.doOCR(bufferedImage));

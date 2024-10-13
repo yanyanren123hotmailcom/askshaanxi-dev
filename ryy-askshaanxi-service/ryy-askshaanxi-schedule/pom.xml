@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>ryy-askshaanxi-wemedia</artifactId>
+    <artifactId>ryy-askshaanxi-schedule</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -18,19 +18,15 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.ryy</groupId>
-            <artifactId>ryy-file-starter</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+        <!-- redis依赖commons-pool 这个依赖一定要添加 -->
         <dependency>
-            <groupId>net.sourceforge.tess4j</groupId>
-            <artifactId>tess4j</artifactId>
-            <version>4.1.1</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
         </dependency>
+
         <!-- kafkfa -->
         <dependency>
             <groupId>org.springframework.kafka</groupId>
@@ -40,11 +36,6 @@
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency>
-
     </dependencies>
 
 </project>

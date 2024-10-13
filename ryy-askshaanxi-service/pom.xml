@@ -15,6 +15,7 @@
         <module>ryy-askshaanxi-user</module>
         <module>ryy-askshaanxi-article</module>
         <module>ryy-askshaanxi-wemedia</module>
+        <module>ryy-askshaanxi-schedule</module>
     </modules>
     <dependencies>
         <dependency>
