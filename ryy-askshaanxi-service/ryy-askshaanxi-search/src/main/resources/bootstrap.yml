@@ -1,15 +1,8 @@
 server:
-  port: 51802
+  port: 51806
 spring:
   application:
-    name: askshaanxi-article
-  freemarker:
-    cache: false #关闭模板缓存，方便测试
-    settings:
-      template_update_delay: 0 #检查模板更新延迟时间，设置为0表示立即检查，如果时间大于0会有缓存不方便进行模板测试
-
-    suffix: .ftl #指定freemarker模板文件的后缀名
-    template-loader-path: classpath:/templates #指定模板文件存放位置
+    name: askshaanxi-search
   cloud:
     nacos:
       discovery:
@@ -17,6 +10,8 @@ spring:
       config:
         server-addr: 192.168.200.130:8848
         file-extension: yml
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   kafka:
     bootstrap-servers: 192.168.200.130:9092
     producer:
@@ -27,12 +22,6 @@ spring:
       group-id: ${spring.application.name}
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-minio:
-  accessKey: minio
-  secretKey: minio123
-  bucket: askshaanxi
-  endpoint: http://192.168.200.130:9000
-  readPath: http://192.168.200.130:9000
+elasticsearch:
+  host: 192.168.200.130
+  port: 9200

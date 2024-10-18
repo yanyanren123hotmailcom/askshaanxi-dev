@@ -1,5 +1,6 @@
 package com.ryy.article.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -16,6 +17,7 @@ import com.ryy.model.article.pojos.ApArticleConfig;
 import com.ryy.model.article.pojos.ApArticleContent;
 import com.ryy.model.common.dtos.ResponseResult;
 import com.ryy.model.common.enums.AppHttpCodeEnum;
+import com.ryy.model.search.vo.SearchArticleVo;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -23,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +37,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.ryy.common.constants.ArticleConstants.TOPIC_SYNC_ES;
 
 
 @Service
@@ -101,7 +106,7 @@ public class ApArticleServiceImpl  extends ServiceImpl<ApArticleMapper, ApArticl
 
         ApArticle article=new ApArticle();
         BeanUtils.copyProperties(dto,article);
-
+        ApArticleContent content=new ApArticleContent();
         if(dto.getId()==null){
             //新增三张表ap_article,ap_article_config,ap_article_content
             apArticleMapper.insert(article);
@@ -114,7 +119,7 @@ public class ApArticleServiceImpl  extends ServiceImpl<ApArticleMapper, ApArticl
             config.setIsDelete(false);
             apArticleConfigMapper.insert(config);
 
-            ApArticleContent content=new ApArticleContent();
+
             content.setArticleId(article.getId());
             content.setContent(dto.getContent());
             apArticleContentMapper.insert(content);
@@ -132,12 +137,30 @@ public class ApArticleServiceImpl  extends ServiceImpl<ApArticleMapper, ApArticl
             //修改文章
             apArticleMapper.updateById(article);
             //修改文章内容
-            ApArticleContent content=apArticleContentMapper.selectOne(Wrappers.<ApArticleContent>lambdaQuery().eq(ApArticleContent::getArticleId,dto.getId()));
+            content=apArticleContentMapper.selectOne(Wrappers.<ApArticleContent>lambdaQuery().eq(ApArticleContent::getArticleId,dto.getId()));
             content.setContent(dto.getContent());
             apArticleContentMapper.updateById(content);
 
         }
+
+        //同步文章内容到es.使用mq
+        syncToEs(article,content);
         return ResponseResult.okResult(article.getId());
+    }
+    @Autowired
+    private KafkaTemplate<String,String> kafkaTemplate;
+
+    //同步文章到es，通过mq
+    private void syncToEs(ApArticle article,ApArticleContent content){
+        try {
+            SearchArticleVo searchArticleVo=new SearchArticleVo();
+            BeanUtils.copyProperties(article,searchArticleVo);
+            searchArticleVo.setContent(content.getContent());
+
+            kafkaTemplate.send(TOPIC_SYNC_ES, JSON.toJSONString(searchArticleVo));
+        }catch (Exception e){
+            log.error("发送同步es文章消息失败----",e);
+        }
     }
 
     private ApArticle setArticleStaticUrl(ApArticle article) throws IOException, TemplateException {

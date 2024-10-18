@@ -16,6 +16,9 @@
         <module>ryy-askshaanxi-article</module>
         <module>ryy-askshaanxi-wemedia</module>
         <module>ryy-askshaanxi-schedule</module>
+        <module>ryy-askshaanxi-power</module>
+        <module>ryy-askshaanxi-admin</module>
+        <module>ryy-askshaanxi-search</module>
     </modules>
     <dependencies>
         <dependency>
