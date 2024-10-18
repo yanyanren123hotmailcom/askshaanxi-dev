@@ -1,6 +1,8 @@
 package com.ryy.search.service.impl;
 
 
+import com.ryy.model.common.dtos.ResponseResult;
+import com.ryy.model.search.dtos.HistorySearchDto;
 import com.ryy.search.pojos.ApUserSearch;
 import com.ryy.search.service.ApUserSearchRecordService;
 import com.ryy.utils.thread.WmThreadLocalUtil;
@@ -54,5 +56,22 @@ public class ApUserSearchRecordServiceImpl implements ApUserSearchRecordService 
                 mongoTemplate.findAndReplace(Query.query(Criteria.where("id").is(toRemoveRecord.getId())),apUserSearch);
             }
         }
+    }
+
+    @Override
+    public ResponseResult searchRecord() {
+        Integer userId=WmThreadLocalUtil.getUser();
+        if(userId==null){
+            return ResponseResult.okResult(null);
+        }
+        Query query = Query.query(Criteria.where("userId").is(userId)).with(Sort.by(Sort.Direction.DESC,"createTime"));
+        List<ApUserSearch> apUserSearches = mongoTemplate.find(query, ApUserSearch.class);
+        return ResponseResult.okResult(apUserSearches);
+    }
+
+    @Override
+    public ResponseResult delUserSearch(HistorySearchDto historySearchDto) {
+        mongoTemplate.remove(Query.query(Criteria.where("id").is(historySearchDto.getId())),ApUserSearch.class);
+        return ResponseResult.okResult(null);
     }
 }
