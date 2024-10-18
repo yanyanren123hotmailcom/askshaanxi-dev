@@ -2,7 +2,7 @@ package com.ryy.utils.thread;
 
 public class WmThreadLocalUtil {
 
-    private final static ThreadLocal<Integer> WM_USER_THREAD_LOCAL = new ThreadLocal<>();
+    private final static InheritableThreadLocal<Integer> WM_USER_THREAD_LOCAL = new InheritableThreadLocal<>();
 
     //存入线程中
     public static void setUser(Integer userId){

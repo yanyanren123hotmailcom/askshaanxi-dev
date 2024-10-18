@@ -3,6 +3,7 @@ package com.ryy.search.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.ryy.model.common.dtos.ResponseResult;
 import com.ryy.model.search.dtos.UserSearchDto;
+import com.ryy.search.service.ApUserSearchRecordService;
 import com.ryy.search.service.ApUserSearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchRequest;
@@ -32,7 +33,8 @@ public class ApUserSearchServiceImpl implements ApUserSearchService {
 
     @Autowired
     private RestHighLevelClient highLevelClient;
-
+    @Autowired
+    private ApUserSearchRecordService apUserSearchRecordService;
     @Override
     public ResponseResult search(UserSearchDto dto) {
         try{
@@ -47,6 +49,10 @@ public class ApUserSearchServiceImpl implements ApUserSearchService {
             if(StringUtils.isEmpty(dto.getSearchWords())){
                 boolQueryBuilder.must(QueryBuilders.matchAllQuery());
             }else{
+                //不为空，记录搜索关键词
+                log.info("搜索关键词不为空，进行记录");
+                apUserSearchRecordService.saveRecord(dto.getSearchWords());
+
                 //对搜索关键词进行分词查询QueryBuilders.queryStringQuery,只查询titile列
                 boolQueryBuilder.must(QueryBuilders.queryStringQuery(dto.getSearchWords()).field("title"));
             }

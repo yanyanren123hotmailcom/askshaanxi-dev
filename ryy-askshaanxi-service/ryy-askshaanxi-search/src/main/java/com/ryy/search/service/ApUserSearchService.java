@@ -6,4 +6,5 @@ import com.ryy.model.search.dtos.UserSearchDto;
 public interface ApUserSearchService {
 
     ResponseResult search(UserSearchDto dto);
+
 }
